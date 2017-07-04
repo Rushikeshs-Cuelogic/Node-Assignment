@@ -1,0 +1,25 @@
+{
+  "name": "day1",
+  "version": "1.0.0",
+  "description": "Node js assignment",
+  "main": "index.js",
+  "scripts": {
+    "start": "server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Rushikeshs-Cuelogic/Node-Assignment.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Rushikeshs-Cuelogic/Node-Assignment/issues"
+  },
+  "homepage": "https://github.com/Rushikeshs-Cuelogic/Node-Assignment#readme",
+  "dependencies": {
+    "dotenv": "^4.0.0",
+    "express": "^4.15.3",
+    "socket.io": "^2.0.3"
+  }
+}

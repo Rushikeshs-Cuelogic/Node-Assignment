@@ -1,28 +1,68 @@
 var app = require('express')();
-var http = require('http').Server(app);
-var io = require('socket.io')(http);
 require('dotenv').config();
+var mongoose = require('mongoose');
+mongoose.Promise = global.Promise;
 
-app.get('/', function(req, res) {
-    res.sendfile('indexOne.html');
+mongoose.connect('mongodb://localhost/Assignment')
+    .then(() => console.log('connection succesful'))
+    .catch((err) => console.error(err));
+
+
+var employeeSchema = new mongoose.Schema({
+    name: String,
+    address: String,
+    position: String,
+    salary: Number,
+    updated_at: { type: Date, default: Date.now },
 });
-users = [];
-io.on('connection', function(socket) {
-    console.log('A user connected');
-    socket.on('setUsername', function(data) {
-        console.log(data);
-        if (users.indexOf(data) > -1) {
-            socket.emit('userExists', data + ' username is taken! Try some other username.');
+
+var employeeModel = mongoose.model('Employee', employeeSchema);
+
+
+function createEmployee() {
+
+    let employeeObj = new employeeModel({
+        name: "RDS one",
+        address: "10th",
+        position: "Sr Software engineer",
+        salary: 2000
+    });
+
+    employeeObj.save();
+
+    console.log("Employee Created", employeeObj);
+};
+
+
+function getEmployee() {
+
+    employeeModel.find({}).exec(function(err, list) {
+        if (err) {
+            console.log("Get employee list failed", err);
         } else {
-            users.push(data);
-            socket.emit('userSet', { username: data });
+            console.log("Employee List");
+            list.forEach(function(item, index) {
+                console.log("\n", item);
+            });
         }
     });
-    socket.on('msg', function(data) {
-        //Send message to everyone
-        io.sockets.emit('newmsg', data);
-    })
-});
-http.listen(process.env.PORT, function() {
+};
+
+function deleteEmployee(id) {
+
+    employeeModel.remove({ _id: id }, function(err) {
+        if (err) {
+            console.log("Delete employee failed", err);
+        } else {
+            console.log("Employee deleted");
+        };
+    });
+};
+createEmployee();
+//deleteEmployee("595de9a92dcc9832719d9039");
+getEmployee();
+
+/*app.listen(process.env.PORT, function() {
     console.log('listening on localhost:', process.env.PORT);
 });
+*/
